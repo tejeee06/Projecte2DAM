@@ -1,29 +1,53 @@
 .welcome-container {
   display: flex;
-  height: 100vh; 
+  height: 100vh;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: #F8F9FA; 
-  font-family: "Roboto", sans-serif; 
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
 }
 
 .welcome-left {
   flex: 1;
   padding: 2rem;
   text-align: center;
+  animation: fadeInLeft 1s ease-in-out;
 }
 
 .welcome-title {
-  font-family: "Playfair Display", serif; 
-  font-size: 4rem;
-  color: #007BFF; 
+  font-family: "Playfair Display", serif;
+  font-size: 4.5rem;
+  color: #1565c0;
   margin-bottom: 1rem;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  transition: all 0.4s ease;
+}
+
+.welcome-title:hover {
+  background: linear-gradient(90deg, #1565c0, #42a5f5, #1565c0);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 2s linear infinite;
+  transform: scale(1.03);
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 
 .welcome-slogan {
-  font-size: 1.5rem;
-  color: #343A40; 
+  font-size: 1.4rem;
+  color: #333;
   font-style: italic;
 }
 
@@ -33,38 +57,74 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: fadeInRight 1s ease-in-out;
 }
 
 .register-box {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  background-color: #ffffffcc;
+  backdrop-filter: blur(10px);
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 .register-title {
   font-size: 2rem;
-  color: #343A40;
-  margin-bottom: 1.5rem;
+  color: #0d47a1;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  margin-top: 0;
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 1rem; 
+  gap: 1rem;
+  flex-wrap: wrap; 
+  margin-top: 1rem;
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @media (max-width: 768px) {
   .welcome-container {
     flex-direction: column;
+    background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 2rem 1rem;
   }
 
-  .welcome-left,
-  .welcome-right {
+  .welcome-left, .welcome-right {
     flex: none;
+    width: 100%;
     padding: 1rem;
+  }
+
+  .welcome-title {
+    font-size: 3rem;
+  }
+
+  .register-box {
+    padding: 2rem 1.5rem;
+  }
+
+  .button-container {
+    flex-direction: column; 
   }
 }
