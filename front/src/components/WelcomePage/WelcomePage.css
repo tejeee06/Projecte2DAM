@@ -1,0 +1,70 @@
+.welcome-container {
+  display: flex;
+  height: 100vh; 
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #F8F9FA; 
+  font-family: "Roboto", sans-serif; 
+}
+
+.welcome-left {
+  flex: 1;
+  padding: 2rem;
+  text-align: center;
+}
+
+.welcome-title {
+  font-family: "Playfair Display", serif; 
+  font-size: 4rem;
+  color: #007BFF; 
+  margin-bottom: 1rem;
+}
+
+.welcome-slogan {
+  font-size: 1.5rem;
+  color: #343A40; 
+  font-style: italic;
+}
+
+.welcome-right {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.register-title {
+  font-size: 2rem;
+  color: #343A40;
+  margin-bottom: 1.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; 
+}
+
+@media (max-width: 768px) {
+  .welcome-container {
+    flex-direction: column;
+  }
+
+  .welcome-left,
+  .welcome-right {
+    flex: none;
+    padding: 1rem;
+  }
+}
