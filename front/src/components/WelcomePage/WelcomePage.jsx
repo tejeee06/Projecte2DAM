@@ -1,8 +1,15 @@
 import React from "react";
 import './WelcomePage.css';
 import WelcomeButton from "../Buttons/WelcomeButton";
+import { useNavigate } from "react-router-dom";
 
 const WelcomePage = () => {
+
+    const navigate = useNavigate();
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
+
     return (
 
         <div className="welcome-container">
@@ -22,7 +29,7 @@ const WelcomePage = () => {
 
                     <div className="button-container">
                         <WelcomeButton>Registrat</WelcomeButton>
-                        <WelcomeButton>Inicia Sessio</WelcomeButton>
+                        <WelcomeButton onClick={handleLoginClick}>Inicia Sessio</WelcomeButton>
                     </div>
 
                 </div>
