@@ -5,73 +5,56 @@ import WelcomeButton from '../Buttons/WelcomeButton';
 import Logo from '../../assets/ProjectLogo.png';
 
 const Login = () => {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
+    const navigate = useNavigate();
+
+    const handleRegisterClick = () => {
+        navigate('/register');
+    };
 
     return (
-
         <div className='login-page-container'>
-
             <header className="login-header">
-
                 <img src={Logo} alt="Compasity Logo" className="login-logo" />
-
             </header>
-
             <main className='login-main'>
-
                 <div className='login-box'>
-
                     <h2 className="login-title">Compasity</h2>
-
                     <form className='login-form'>
-
                         <div className="input-group">
-
                             <label htmlFor="username">Usuari</label>
                             <input 
                                 type="text" 
-                                id="Usuari"
+                                id="username"
                                 value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 placeholder="Escriu el teu usuari"
                                 required 
                             />
-
                         </div>
-
                         <div className="input-group">
-
                             <label htmlFor="password">Contrasenya</label>
                             <input 
                                 type="password" 
                                 id="password"
                                 value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Escriu la teva contrasenya"
                                 required 
                             />
-
                         </div>
-
                         <WelcomeButton type="submit">
                             Inicia Sessió
                         </WelcomeButton>
-
                     </form>
-
                     <div className="register-link">
-
-                        <p>No tens un compte? <span>Registrat aqui</span></p>
-
+                        <p>No tens un compte? <span onClick={handleRegisterClick}>Registrat aqui</span></p>
                     </div>
-
                 </div>
-
             </main>
-
         </div>
-
-
     )
 }
 
