@@ -9,6 +9,9 @@ const WelcomePage = () => {
     const handleLoginClick = () => {
         navigate('/login');
     };
+    const handleRegisterClick = () => {
+        navigate('/register');
+    };
 
     return (
 
@@ -28,7 +31,7 @@ const WelcomePage = () => {
                     <h2>Benvingut a Compasity</h2>
 
                     <div className="button-container">
-                        <WelcomeButton>Registrat</WelcomeButton>
+                        <WelcomeButton onClick={handleRegisterClick}>Registrat</WelcomeButton>
                         <WelcomeButton onClick={handleLoginClick}>Inicia Sessio</WelcomeButton>
                     </div>
 
