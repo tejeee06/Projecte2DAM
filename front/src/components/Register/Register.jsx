@@ -16,6 +16,9 @@ const Register = () => {
         description: ''
     });
 
+    const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -24,9 +27,37 @@ const Register = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Datos del formulario:', formData);
+        setIsLoading(true);
+        setMessage('');
+
+        try {
+            const response = await fetch('http://localhost:3001/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Registre exitos! Redirigint  al login...');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            } else {
+                setMessage(data.message || 'Error en el registre. Intenta ho de nou.');
+            }
+
+        } catch (error) {
+            console.error('Error en el fetch:', error);
+            setMessage('No s ha pogut connectar amb el servidor.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -52,6 +83,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     placeholder="El teu nom"
                                     required 
+                                    disabled={isLoading}
                                 />
                             </div>
                             <div className="input-group">
@@ -64,6 +96,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     placeholder="Els teus cognoms"
                                     required 
+                                    disabled={isLoading}
                                 />
                             </div>
                         </div>
@@ -78,6 +111,7 @@ const Register = () => {
                                 onChange={handleChange}
                                 placeholder="Escriu un nom d'usuari"
                                 required 
+                                disabled={isLoading}
                             />
                         </div>
 
@@ -91,6 +125,7 @@ const Register = () => {
                                 onChange={handleChange}
                                 placeholder="el.teu@correu.com"
                                 required 
+                                disabled={isLoading}
                             />
                         </div>
 
@@ -104,6 +139,7 @@ const Register = () => {
                                 onChange={handleChange}
                                 placeholder="Escriu una contrasenya"
                                 required 
+                                disabled={isLoading}
                             />
                         </div>
 
@@ -115,11 +151,18 @@ const Register = () => {
                                 value={formData.description}
                                 onChange={handleChange}
                                 placeholder="Una breu descripció sobre tu..."
+                                disabled={isLoading}
                             />
                         </div>
 
-                        <WelcomeButton type="submit">
-                            Registra'm
+                        {message && (
+                            <div className={message.includes('Error') ? 'error-message' : 'success-message'}>
+                                {message}
+                            </div>
+                        )}
+
+                        <WelcomeButton type="submit" disabled={isLoading}>
+                            {isLoading ? 'Registrant...' : 'Registra\'m'}
                         </WelcomeButton>
                     </form>
 

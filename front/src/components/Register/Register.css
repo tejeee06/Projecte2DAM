@@ -158,3 +158,20 @@
     padding: 2rem 1rem;
   }
 }
+
+/* Missatges de error */
+.error-message {
+  color: #D32F2F;
+  background-color: #FFCDD2;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.success-message {
+  color: #388E3C;
+  background-color: #C8E6C9;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
