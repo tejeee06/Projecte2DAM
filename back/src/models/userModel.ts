@@ -2,17 +2,15 @@ import pool from '../config/db';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { User } from '../types/userTypes';
 
-// --- Interfaz local para la BD ---
 interface UserDataForDb {
   name: string;
   surnames: string;
   userName: string;
-  password: string; // Hasheada
+  password: string; 
   email: string;
   description: string | null;
 }
 
-// --- FUNCIÓN CREAR USUARIO ---
 export const createUser = async (userData: UserDataForDb): Promise<number> => {
   const { name, surnames, userName, password, email, description } = userData;
 
@@ -38,7 +36,6 @@ export const createUser = async (userData: UserDataForDb): Promise<number> => {
 };
 
 
-// --- FUNCIÓN BUSCAR USUARIO (para Login) ---
 export const findUserByUsernameOrEmail = async (usernameOrEmail: string): Promise<User | null> => {
   const sql = `
     SELECT * FROM Users
