@@ -15,5 +15,5 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Benvingut a la API de Compasity');
 });
 app.listen(PORT, () => {
-  console.log(`[server]: Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`[server]: Servidor corrent en http://localhost:${PORT}`);
 });
