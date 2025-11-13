@@ -90,7 +90,7 @@ const Login = () => {
                         </div>
 
                         {message && (
-                            <div className={message.includes('Benvingut') ? 'success-message' : 'error-message'}>
+                            <div className={message.includes('Bienvenido') ? 'success-message' : 'error-message'}>
                                 {message}
                             </div>
                         )}
