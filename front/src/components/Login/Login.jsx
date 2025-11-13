@@ -33,7 +33,6 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // 5. ¡Éxito!
                 setMessage('¡Bienvenido! Redirigiendo...');
                 console.log('Datos del usuario:', data.user);
                 
