@@ -1,0 +1,256 @@
+/* --- LAYOUT PRINCIPAL --- */
+.home-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER --- */
+.home-header {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 10;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-logo {
+    height: 40px; 
+    width: auto;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: #e3f2fd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1565c0;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-avatar:hover {
+    background-color: #bbdefb;
+    transform: scale(1.05);
+}
+
+.user-avatar svg {
+    width: 24px;
+    height: 24px;
+}
+
+.separator {
+    width: 1px;
+    height: 24px;
+    background-color: #e0e0e0;
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #666;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.logout-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.logout-btn:hover {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* --- MAIN --- */
+.home-main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.welcome-banner {
+    margin-bottom: 2rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.dashboard-title {
+    color: #333;
+    margin-bottom: 0.2rem;
+    font-weight: 400;
+    font-size: 2rem;
+}
+
+.highlight-name {
+    color: #1565c0;
+    font-weight: 700;
+    font-family: "Playfair Display", serif;
+}
+
+.dashboard-subtitle {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-top: 0;
+}
+
+/* --- TARGETES DE NAVEGACIÓ  --- */
+.cards-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; 
+}
+
+.nav-card {
+    flex: 1;
+    min-width: 200px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px); 
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-icon svg {
+    width: 32px;
+    height: 32px;
+    color: #757575;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-card span {
+    font-weight: 500;
+    color: #555;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-card:hover {
+    transform: translateY(-5px);
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.nav-card:hover .card-icon svg {
+    transform: scale(1.1);
+    color: #1565c0;
+}
+
+.nav-card.active {
+    background-color: #fff;
+    border-color: #1565c0; 
+    box-shadow: 0 8px 20px rgba(21, 101, 192, 0.15);
+}
+
+.nav-card.active .card-icon svg {
+    color: #1565c0; 
+}
+
+.nav-card.active span {
+    color: #1565c0;
+    font-weight: bold;
+}
+
+/* --- SECCIÓ DINÀMICA --- */
+.dynamic-section {
+    background-color: #ffffff;
+    border-radius: 20px;
+    min-height: 450px; 
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    position: relative;
+    transition: height 0.3s ease;
+}
+
+.dynamic-content-placeholder {
+    text-align: center;
+    padding-top: 3rem;
+    color: #666;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .home-header {
+        padding: 1rem;
+    }
+    
+    .logout-btn span {
+        display: none; 
+    }
+
+    .logout-btn {
+        padding: 0.5rem; 
+    }
+
+    .home-main {
+        padding: 1.5rem 1rem;
+    }
+
+    .dashboard-title {
+        font-size: 1.5rem;
+    }
+
+    .cards-container {
+        gap: 1rem;
+    }
+    
+    .nav-card {
+        padding: 1rem;
+        min-width: 100%; 
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .nav-card:hover {
+        transform: none; 
+    }
+}
