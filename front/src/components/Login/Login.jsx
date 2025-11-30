@@ -36,6 +36,11 @@ const Login = () => {
                 setMessage('¡Bienvenido! Redirigiendo...');
                 console.log('Datos del usuario:', data.user);
                 
+                // --- AQUI ESTÁ EL ÚNICO CAMBIO ---
+                // Guardamos el usuario para que la HomePage pueda decir "Hola Nombre"
+                localStorage.setItem('user', JSON.stringify(data.user));
+                // ---------------------------------
+
                 setTimeout(() => {
                     navigate('/homePage');
                 }, 1500);
@@ -44,7 +49,6 @@ const Login = () => {
             }
 
         } catch (error) {
-
             console.error('Error de conexió:', error);
             setMessage('No sa pogut connectar amb el servidor.');
         } finally {

@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './HomePage.css';
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/ProjectLogo.png'; 
 
 const HomePage = () => {
     const navigate = useNavigate();
+    
     const [activeTab, setActiveTab] = useState('create');
-    const username = "Viatger"; 
+    const [username, setUsername] = useState('Viatger'); 
+
+    useEffect(() => {
+        const storedUserJSON = localStorage.getItem('user');
+        
+        if (storedUserJSON) {
+            const storedUser = JSON.parse(storedUserJSON);
+            if (storedUser.Name) {
+                setUsername(storedUser.Name);
+            }
+        }
+    }, []);
 
     const handleLogout = () => {
-        console.log("Tancant sessió...");
+        localStorage.removeItem('user');
         navigate('/');
     };
 
     const handleProfileClick = () => {
-        console.log("Anar al perfil (Pendent d'implementar)");
+        console.log("Anar al perfil");
     };
 
-    // Renderitzat condicional del contingut dinàmic
     const renderContent = () => {
         switch (activeTab) {
             case 'create':
@@ -31,7 +42,7 @@ const HomePage = () => {
                 return (
                     <div className="dynamic-content-placeholder fade-in">
                         <h3>Els Meus Viatges</h3>
-                        <p>Aquí apareixerà la llista dels teus viatges planificats.</p>
+                        <p>Aquí apareixerà la llista dels teus viatges.</p>
                     </div>
                 );
             case 'friends':
@@ -82,7 +93,6 @@ const HomePage = () => {
                 </div>
 
                 <div className="cards-container">
-                    
                     <div 
                         className={`nav-card ${activeTab === 'create' ? 'active' : ''}`}
                         onClick={() => setActiveTab('create')}
