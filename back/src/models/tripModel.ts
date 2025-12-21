@@ -84,3 +84,10 @@ export const getTripsByUserId = async (connection: any, userId: number) => {
     const [rows] = await connection.execute(sql, [userId]);
     return rows;
 };
+
+// Funcio per eliminar un viatge
+export const deleteTrip = async (connection: any, tripId: number) => {
+    const sql = `DELETE FROM Trips WHERE PK_TripID = ?`;
+    const [result] = await connection.execute(sql, [tripId]);
+    return result;
+};

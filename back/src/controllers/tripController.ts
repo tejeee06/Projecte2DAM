@@ -116,3 +116,23 @@ export const getUserTrips = async (req: Request, res: Response) => {
         connection.release();
     }
 };
+
+// Controlador per eliminar un viatge
+export const deleteTrip = async (req: Request, res: Response) => {
+    const { tripId } = req.params;
+
+    if (!tripId) {
+        return res.status(400).json({ message: 'Falta el ID del viaje.' });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+        await tripModel.deleteTrip(connection, parseInt(tripId));
+        res.json({ message: 'Viatge eliminat correctament' });
+    } catch (error) {
+        console.error('Error eliminando viaje:', error);
+        res.status(500).json({ message: 'Error al eliminar el viaje.' });
+    } finally {
+        connection.release();
+    }
+};
