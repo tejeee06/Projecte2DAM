@@ -3,6 +3,7 @@ import './HomePage.css';
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/ProjectLogo.png'; 
 import TripForm from "../TripForm/TripForm";
+import TripList from "../TripList/TripList";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -41,9 +42,9 @@ const HomePage = () => {
                 );
             case 'list':
                 return (
-                    <div className="dynamic-content-placeholder fade-in">
-                        <h3>Els Meus Viatges</h3>
-                        <p>Aquí apareixerà la llista dels teus viatges.</p>
+                    <div className="trips-view-container fade-in">
+                        <h3 className="trips-view-title">Els Meus Viatges</h3>
+                        <TripList />
                     </div>
                 );
             case 'friends':

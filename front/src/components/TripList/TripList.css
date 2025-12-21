@@ -1,0 +1,105 @@
+/* Contenedor de la rejilla */
+.trips-grid {
+    display: grid;
+    /* Esto crea columnas automáticas. Mínimo 300px, si cabe más, pone más */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* La Tarjeta */
+.trip-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Efecto Hover: Levantar y sombra */
+.trip-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(21, 101, 192, 0.15);
+    border-color: #bbdefb;
+}
+
+/* Decoración superior (como una foto placeholder) */
+.card-header-gradient {
+    height: 80px;
+    background: linear-gradient(135deg, #42a5f5, #1565c0);
+    position: relative;
+}
+
+.card-date-badge {
+    position: absolute;
+    bottom: -12px;
+    right: 16px;
+    background: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #1565c0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.trip-title {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.trip-desc {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    display: -webkit-box; /* Cortar texto largo */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Estilo para las ciudades */
+.cities-preview {
+    margin-top: auto; /* Empuja esto al fondo */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.city-pill {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #777;
+    width: 100%;
+    grid-column: 1 / -1;
+}
