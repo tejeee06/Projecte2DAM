@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './HomePage.css';
 import { useNavigate } from "react-router-dom";
 import logo from '../../assets/ProjectLogo.png'; 
+import TripForm from "../TripForm/TripForm";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ const HomePage = () => {
                 return (
                     <div className="dynamic-content-placeholder fade-in">
                         <h3>Crear Nou Viatge</h3>
-                        <p>Aquí anirà el formulari per començar una nova aventura.</p>
+                        <TripForm />
                     </div>
                 );
             case 'list':
