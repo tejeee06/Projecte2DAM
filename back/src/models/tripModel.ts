@@ -61,3 +61,26 @@ export const addParticipant = async (connection: any, tripId: number, userId: nu
     const sql = `INSERT INTO Trip_Participants (FK_TripID, FK_UserID) VALUES (?, ?)`;
     await connection.execute(sql, [tripId, userId]);
 };
+
+// Funcio per obtenir els viatges d'un usuari
+export const getTripsByUserId = async (connection: any, userId: number) => {
+    const sql = `
+        SELECT 
+            T.PK_TripID as id,
+            T.TripName as name,
+            T.TripDescription as description,
+            DATE_FORMAT(T.StartDate, '%Y-%m-%d') as startDate,
+            DATE_FORMAT(T.EndDate, '%Y-%m-%d') as endDate,
+            GROUP_CONCAT(C.CityName ORDER BY TD.VisitOrder ASC SEPARATOR ', ') as cities
+        FROM Trips T
+        INNER JOIN Trip_Participants TP ON T.PK_TripID = TP.FK_TripID
+        LEFT JOIN Trip_Destinations TD ON T.PK_TripID = TD.FK_TripID
+        LEFT JOIN Cities C ON TD.FK_CityID = C.PK_CityID
+        WHERE TP.FK_UserID = ?
+        GROUP BY T.PK_TripID
+        ORDER BY T.StartDate DESC
+    `;
+    
+    const [rows] = await connection.execute(sql, [userId]);
+    return rows;
+};

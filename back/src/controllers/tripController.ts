@@ -3,6 +3,7 @@ import pool from '../config/db';
 import * as tripModel from '../models/tripModel';
 import axios from 'axios';
 
+// Funció per obtenir coordenades d'una ciutat utilitzant l'API de Nominatim
 const getCoordinatesFromNominatim = async (cityName: string) => {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1`;
     
@@ -28,6 +29,7 @@ const getCoordinatesFromNominatim = async (cityName: string) => {
 
 };
 
+// Controlador per crear un nou viatge
 export const createTrip = async (req: Request, res: Response) => {
     const { name, description, startDate, endDate, creatorId, cities } = req.body;
 
@@ -83,6 +85,33 @@ export const createTrip = async (req: Request, res: Response) => {
         await connection.rollback();
         console.error('Error creant el viatge:', error);
         res.status(500).json({ message: error.message || 'Error intern del servidor.' });
+    } finally {
+        connection.release();
+    }
+};
+
+// Controlador per obtenir els viatges d'un usuari
+export const getUserTrips = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+
+    if (!userId) {
+        return res.status(400).json({ message: 'Falta el ID del usuario.' });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+        const trips = await tripModel.getTripsByUserId(connection, parseInt(userId));
+        
+        const formattedTrips = (trips as any[]).map(trip => ({
+            ...trip,
+            cities: trip.cities ? trip.cities.split(', ') : []
+        }));
+
+        res.json(formattedTrips);
+
+    } catch (error) {
+        console.error('Error obtenint viatges:', error);
+        res.status(500).json({ message: 'Error al carregar els viatges.' });
     } finally {
         connection.release();
     }
