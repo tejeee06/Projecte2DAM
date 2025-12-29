@@ -1,9 +1,8 @@
-// Controlador per processar les solicitutd del Registe y del Login
-
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import * as userModel from '../models/userModel';
 import { UserFormData } from '../types/userTypes';
+import pool from '../config/db';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -72,4 +71,61 @@ export const loginUser = async (req: Request, res: Response) => {
     console.error('[userController] Error al iniciar sesió:', error);
     res.status(500).json({ message: 'Internal server Error.' });
   }
+};
+
+export const updateUserProfile = async (req: Request, res: Response) => {
+    const userId = req.params.id; 
+    const { Name, Surnames, Description } = req.body;
+    let profilePictureUrl = null;
+
+    console.log(`[Update] Intentando actualizar usuario ID: ${userId}`);
+
+    try {
+        if (req.file) {
+            const port = process.env.PORT || 3000;
+            const host = req.get('host') || `localhost:${port}`;
+            profilePictureUrl = `http://${host}/uploads/profiles/${req.file.filename}`;
+        }
+
+        let query = '';
+        let values = [];
+
+        if (profilePictureUrl) {
+            query = `
+                UPDATE Users 
+                SET Name = ?, Surnames = ?, Description = ?, ProfilePicture = ? 
+                WHERE PK_UserID = ? 
+            `;
+            values = [Name, Surnames, Description, profilePictureUrl, userId];
+        } 
+        else {
+            query = `
+                UPDATE Users 
+                SET Name = ?, Surnames = ?, Description = ? 
+                WHERE PK_UserID = ?
+            `;
+            values = [Name, Surnames, Description, userId];
+        }
+
+        const [result]: any = await pool.query(query, values);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuari no trobat o no s\'han fet canvis.' });
+        }
+
+        res.json({ 
+            message: 'Perfil actualitzat correctament',
+            user: {
+                PK_UserID: parseInt(userId),
+                Name,
+                Surnames,
+                Description,
+                ProfilePicture: profilePictureUrl 
+            }
+        });
+
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error);
+        res.status(500).json({ message: 'Error del servidor al actualizar datos.' });
+    }
 };
