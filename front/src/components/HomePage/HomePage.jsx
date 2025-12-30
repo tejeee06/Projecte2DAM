@@ -49,7 +49,12 @@ const HomePage = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
-    const handleEditProfile = () => console.log("Anar a editar perfil");
+    // --- MODIFICACIÓN AQUÍ ---
+    const handleEditProfile = () => {
+        setIsMenuOpen(false);
+        navigate('/profile'); 
+    };
+
     const handleFriendRequests = () => console.log("Veure sol·licituds");
 
     const renderContent = () => {
@@ -99,7 +104,6 @@ const HomePage = () => {
                     {isMenuOpen && (
                         <div className="user-dropdown-menu">
                             <div className="menu-header">
-                                {/* Mini Avatar Decorativo */}
                                 <div className="user-avatar" style={{width: '36px', height: '36px', cursor:'default', background:'#f0f0f0'}}>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:'20px', height:'20px'}}>
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
