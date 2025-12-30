@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import * as userModel from '../models/userModel';
-import { UserFormData } from '../types/userTypes';
+import { UserFormData, UpdateUserBody } from '../types/userTypes';
 import pool from '../config/db';
+import { RowDataPacket } from 'mysql2';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -75,57 +76,92 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const updateUserProfile = async (req: Request, res: Response) => {
     const userId = req.params.id; 
-    const { Name, Surnames, Description } = req.body;
-    let profilePictureUrl = null;
-
-    console.log(`[Update] Intentando actualizar usuario ID: ${userId}`);
+    const body = req.body || {};
+    const inputName = body.Name || body.name;
+    const inputSurnames = body.Surnames || body.surnames;
+    const inputUsername = body.Username || body.username || body.userName;
+    const inputDescription = body.Description !== undefined ? body.Description : body.description;
+    const inputPassword = body.password || body.Password;
 
     try {
+        const [currentRows] = await pool.query<RowDataPacket[]>(
+            'SELECT * FROM Users WHERE PK_UserID = ?', 
+            [userId]
+        );
+
+        if (currentRows.length === 0) {
+            return res.status(404).json({ message: 'Usuari no trobat.' });
+        }
+        const currentUser = currentRows[0];
+
+        if (inputUsername && inputUsername.trim() !== '' && inputUsername !== currentUser.UserName) {
+            const [existingUser] = await pool.query<RowDataPacket[]>(
+                'SELECT PK_UserID FROM Users WHERE UserName = ? AND PK_UserID != ?',
+                [inputUsername, userId]
+            );
+
+            if (existingUser.length > 0) {
+                return res.status(409).json({ message: 'Aquest nom d\'usuari ja està en ús.' });
+            }
+        }
+
+        let finalPassword = currentUser.Password;
+        if (inputPassword && inputPassword.trim() !== "") {
+            const salt = await bcrypt.genSalt(10);
+            finalPassword = await bcrypt.hash(inputPassword, salt);
+        }
+
+
+        let finalProfilePicture = currentUser.ProfilePicture;
         if (req.file) {
-            const port = process.env.PORT || 3000;
+            const port = process.env.PORT || 3001; 
             const host = req.get('host') || `localhost:${port}`;
-            profilePictureUrl = `http://${host}/uploads/profiles/${req.file.filename}`;
+            finalProfilePicture = `http://${host}/uploads/profiles/${req.file.filename}`;
         }
 
-        let query = '';
-        let values = [];
+        const finalName = (inputName && inputName.trim() !== '') ? inputName : currentUser.Name;
+        const finalSurnames = (inputSurnames && inputSurnames.trim() !== '') ? inputSurnames : currentUser.Surnames;
+        const finalUsername = (inputUsername && inputUsername.trim() !== '') ? inputUsername : currentUser.UserName;
+        const finalDescription = (inputDescription !== undefined) ? inputDescription : currentUser.Description;
 
-        if (profilePictureUrl) {
-            query = `
-                UPDATE Users 
-                SET Name = ?, Surnames = ?, Description = ?, ProfilePicture = ? 
-                WHERE PK_UserID = ? 
-            `;
-            values = [Name, Surnames, Description, profilePictureUrl, userId];
-        } 
-        else {
-            query = `
-                UPDATE Users 
-                SET Name = ?, Surnames = ?, Description = ? 
-                WHERE PK_UserID = ?
-            `;
-            values = [Name, Surnames, Description, userId];
-        }
+        const query = `
+            UPDATE Users 
+            SET Name = ?, 
+                Surnames = ?, 
+                UserName = ?, 
+                Description = ?, 
+                Password = ?, 
+                ProfilePicture = ?
+            WHERE PK_UserID = ?
+        `;
 
-        const [result]: any = await pool.query(query, values);
+        const values = [
+            finalName,
+            finalSurnames,
+            finalUsername,
+            finalDescription,
+            finalPassword,
+            finalProfilePicture,
+            userId
+        ];
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Usuari no trobat o no s\'han fet canvis.' });
-        }
+        await pool.query(query, values);
 
         res.json({ 
             message: 'Perfil actualitzat correctament',
             user: {
                 PK_UserID: parseInt(userId),
-                Name,
-                Surnames,
-                Description,
-                ProfilePicture: profilePictureUrl 
+                Username: finalUsername,
+                Name: finalName,
+                Surnames: finalSurnames,
+                Description: finalDescription,
+                ProfilePicture: finalProfilePicture,
+                Email: currentUser.Email
             }
         });
 
     } catch (error) {
         console.error('Error al actualizar perfil:', error);
-        res.status(500).json({ message: 'Error del servidor al actualizar datos.' });
+        res.status(500).json({ message: 'Error del servidor al actualizar les dades.' });
     }
 };

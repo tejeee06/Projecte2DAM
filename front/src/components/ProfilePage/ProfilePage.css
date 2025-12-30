@@ -10,7 +10,9 @@
     box-sizing: border-box;
 }
 
+/* --- TARGETA CENTRAL --- */
 .profile-card {
+    position: relative; 
     background-color: #ffffff;
     width: 100%;
     max-width: 850px;
@@ -23,11 +25,37 @@
     animation: scaleIn 0.4s ease-out;
 }
 
+/* --- ESTILS DEL LOGO --- */
+.profile-logo-container {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.profile-logo {
+    height: 32px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.profile-logo-container:hover {
+    transform: scale(1.05);
+}
+
+.profile-logo-container:hover .profile-logo {
+    opacity: 1;
+}
+
+/* --- HEADER --- */
 .profile-header {
     text-align: center;
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
+    margin-top: 0.5rem; 
 }
 
 .profile-header h2 {
@@ -44,6 +72,7 @@
     margin: 0.5rem 0 0 0;
 }
 
+/* --- CONTINGUT PRINCIPAL SECCIO --- */
 .profile-content {
     display: flex;
     gap: 3rem;
@@ -146,6 +175,7 @@
     min-height: 80px;
 }
 
+/* --- BOTO --- */
 .save-btn {
     margin-top: 0.5rem;
     padding: 0.9rem;
@@ -173,6 +203,7 @@
     box-shadow: none;
 }
 
+/* --- ANIMACIONS --- */
 @keyframes scaleIn {
     from { opacity: 0; transform: scale(0.98); }
     to { opacity: 1; transform: scale(1); }
@@ -187,11 +218,20 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- RESPONSIVE (Móvil) --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .profile-card {
         padding: 1.5rem;
         max-width: 100%;
+        padding-top: 3.5rem; 
+    }
+
+    .profile-logo-container {
+        top: 15px;
+        left: 20px;
+    }
+    .profile-logo {
+        height: 28px;
     }
 
     .profile-content {
@@ -201,7 +241,7 @@
     }
 
     .input-row {
-        flex-direction: column; 
+        flex-direction: column;
         gap: 1rem;
     }
 

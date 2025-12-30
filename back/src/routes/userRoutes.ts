@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { registerUser, loginUser } from '../controllers/userController';
-import { updateUserProfile } from '../controllers/userController';
+import { registerUser, loginUser, updateUserProfile } from '../controllers/userController';
 import { upload } from '../config/multerConfig';
 
 const router = Router();

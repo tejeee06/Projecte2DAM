@@ -49,7 +49,6 @@ const HomePage = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
-    // --- MODIFICACIÓN AQUÍ ---
     const handleEditProfile = () => {
         setIsMenuOpen(false);
         navigate('/profile'); 
