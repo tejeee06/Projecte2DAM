@@ -12,7 +12,7 @@
 
 /* --- TARGETA CENTRAL --- */
 .profile-card {
-    position: relative; 
+    position: relative;
     background-color: #ffffff;
     width: 100%;
     max-width: 850px;
@@ -55,7 +55,8 @@
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 1rem;
     margin-bottom: 0.5rem;
-    margin-top: 0.5rem; 
+    margin-top: 0.5rem;
+    position: relative;
 }
 
 .profile-header h2 {
@@ -175,7 +176,7 @@
     min-height: 80px;
 }
 
-/* --- BOTO --- */
+/* --- BOTONS --- */
 .save-btn {
     margin-top: 0.5rem;
     padding: 0.9rem;
@@ -201,6 +202,28 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+
+.delete-account-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #ef5350;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-account-btn:hover {
+    background-color: #ffebee;
+    color: #c62828;
+    transform: scale(1.1);
 }
 
 /* --- ANIMACIONS --- */
@@ -247,5 +270,9 @@
 
     .form-section {
         width: 100%;
+    }
+    
+    .delete-account-btn {
+        top: -10px; 
     }
 }

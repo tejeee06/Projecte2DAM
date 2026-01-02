@@ -59,3 +59,15 @@ export const findUserByUsernameOrEmail = async (usernameOrEmail: string): Promis
     throw error;
   }
 };
+
+export const deleteUserById = async (userId: number): Promise<boolean> => {
+  const sql = 'DELETE FROM Users WHERE PK_UserID = ?';
+  
+  try {
+    const [result] = await pool.execute<ResultSetHeader>(sql, [userId]);
+    return result.affectedRows > 0;
+  } catch (error) {
+    console.error('[userModel] Error al eliminar l\'usuari:', error);
+    throw error;
+  }
+};

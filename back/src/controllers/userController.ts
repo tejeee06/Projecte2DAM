@@ -4,6 +4,7 @@ import * as userModel from '../models/userModel';
 import { UserFormData, UpdateUserBody } from '../types/userTypes';
 import pool from '../config/db';
 import { RowDataPacket } from 'mysql2';
+import {deleteUserById } from '../models/userModel';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -163,5 +164,26 @@ export const updateUserProfile = async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error al actualizar perfil:', error);
         res.status(500).json({ message: 'Error del servidor al actualizar les dades.' });
+    }
+};
+
+export const deleteUserAccount = async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.id);
+
+    if (isNaN(userId)) {
+        return res.status(400).json({ message: 'ID de usuari invalid.' });
+    }
+
+    try {
+        const deleted = await deleteUserById(userId);
+
+        if (deleted) {
+            res.status(200).json({ message: 'Usuari eliminat correctament.' });
+        } else {
+            res.status(404).json({ message: 'No s\'ha trobat l\'usuari per eliminar.' });
+        }
+    } catch (error) {
+        console.error('Error al eliminar el compte:', error);
+        res.status(500).json({ message: 'Error del servidor al eliminar l\'usuari.' });
     }
 };
