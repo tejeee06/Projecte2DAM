@@ -5,11 +5,14 @@ import logo from '../../assets/ProjectLogo.png';
 import TripForm from "../TripForm/TripForm";
 import TripList from "../TripList/TripList";
 
+const API_URL = 'http://localhost:3001'; 
+
 const HomePage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('create');
     const [username, setUsername] = useState('Viatger'); 
     const [email, setEmail] = useState('');
+    const [profilePicture, setProfilePicture] = useState(null); 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -17,12 +20,24 @@ const HomePage = () => {
         const storedUserJSON = localStorage.getItem('user');
         
         if (storedUserJSON) {
-            const storedUser = JSON.parse(storedUserJSON);
-            if (storedUser.Name) {
-                setUsername(storedUser.Name);
-            }
-            if (storedUser.Email) {
-                setEmail(storedUser.Email);
+            try {
+                const storedUser = JSON.parse(storedUserJSON);
+                if (storedUser.Name) setUsername(storedUser.Name);
+                if (storedUser.Email) setEmail(storedUser.Email);
+                
+                if (storedUser.ProfilePicture) {
+                    let imagePath = storedUser.ProfilePicture;
+                    imagePath = imagePath.replace(/\\/g, "/");
+
+                    if (!imagePath.startsWith('http')) {
+                        const separator = imagePath.startsWith('/') ? '' : '/';
+                        setProfilePicture(`${API_URL}${separator}${imagePath}`);
+                    } else {
+                        setProfilePicture(imagePath);
+                    }
+                }
+            } catch (error) {
+                console.error("Error al leer datos del usuario", error);
             }
         }
     }, []);
@@ -33,7 +48,6 @@ const HomePage = () => {
                 setIsMenuOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
@@ -84,6 +98,13 @@ const HomePage = () => {
         }
     };
 
+    const DefaultUserIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+    );
+
     return (
         <div className="home-container">
             <header className="home-header">
@@ -92,22 +113,32 @@ const HomePage = () => {
                 </div>
 
                 <div className="user-section" ref={menuRef}>
-
+                    
                     <div className="user-avatar" onClick={toggleMenu} title="Menú d'usuari">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
+                        {profilePicture ? (
+                            <img 
+                                src={profilePicture} 
+                                alt="Perfil" 
+                                className="avatar-img"
+                                onError={(e) => { 
+                                    e.target.style.display = 'none';
+                                    e.target.parentNode.classList.add('fallback-icon'); 
+                                }}
+                            />
+                        ) : (
+                           <DefaultUserIcon />
+                        )}
                     </div>
 
                     {isMenuOpen && (
                         <div className="user-dropdown-menu">
                             <div className="menu-header">
-                                <div className="user-avatar" style={{width: '36px', height: '36px', cursor:'default', background:'#f0f0f0'}}>
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:'20px', height:'20px'}}>
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
+                                <div className="user-avatar small-avatar">
+                                    {profilePicture ? (
+                                        <img src={profilePicture} alt="User" className="avatar-img" />
+                                    ) : (
+                                        <DefaultUserIcon />
+                                    )}
                                 </div>
                                 <div className="menu-user-info">
                                     <h4>{username}</h4>
@@ -133,25 +164,24 @@ const HomePage = () => {
                                     Sol·licituds d'Amistat
                                     <span className="notification-badge">2</span>
                                 </li>
+
+                                <div className="menu-separator"></div>
+
+                                <li className="menu-item logout-item" onClick={handleLogout}>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    Tancar Sessió
+                                </li>
                             </ul>
                         </div>
                     )}
-                    
-                    <div className="separator"></div>
-
-                    <button className="logout-btn" onClick={handleLogout}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="logout-icon">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                        <span>Tancar Sessió</span>
-                    </button>
                 </div>
             </header>
 
             <main className="home-main">
-                
                 <div className="welcome-banner fade-in">
                     <h2 className="dashboard-title">Hola, <span className="highlight-name">{username}</span> 👋</h2>
                     <p className="dashboard-subtitle">On et portarà la teva propera aventura?</p>
@@ -208,7 +238,6 @@ const HomePage = () => {
                 <section className="dynamic-section">
                     {renderContent()}
                 </section>
-
             </main>
         </div>
     );
