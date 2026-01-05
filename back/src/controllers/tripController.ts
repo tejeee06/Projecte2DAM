@@ -136,3 +136,31 @@ export const deleteTrip = async (req: Request, res: Response) => {
         connection.release();
     }
 };
+
+// Controlador per obtenir els detalls d'un viatge
+export const getTripDetails = async (req: Request, res: Response) => {
+    const { tripId } = req.params;
+
+    if (!tripId) return res.status(400).json({ message: 'Falta Trip ID' });
+
+    const connection = await pool.getConnection();
+    try {
+        const [trip, cities, participants] = await Promise.all([
+            tripModel.getTripById(connection, parseInt(tripId)),
+            tripModel.getCitiesByTripId(connection, parseInt(tripId)),
+            tripModel.getTripParticipants(connection, parseInt(tripId))
+        ]);
+
+        if (!trip) {
+            return res.status(404).json({ message: 'Viatge no trobat' });
+        }
+
+        res.json({ ...trip, cities, participants });
+
+    } catch (error) {
+        console.error('Error obtenint detalls:', error);
+        res.status(500).json({ message: 'Error del servidor' });
+    } finally {
+        connection.release();
+    }
+};

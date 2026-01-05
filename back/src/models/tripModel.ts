@@ -91,3 +91,51 @@ export const deleteTrip = async (connection: any, tripId: number) => {
     const [result] = await connection.execute(sql, [tripId]);
     return result;
 };
+
+// Funcio per obtenir els detalls d'un viatge
+export const getTripById = async (connection: any, tripId: number) => {
+    const sql = `
+        SELECT 
+            PK_TripID as id,
+            TripName as name,
+            TripDescription as description,
+            DATE_FORMAT(StartDate, '%Y-%m-%d') as startDate,
+            DATE_FORMAT(EndDate, '%Y-%m-%d') as endDate,
+            FK_CreatorID as creatorId
+        FROM Trips 
+        WHERE PK_TripID = ?
+    `;
+    const [rows] = await connection.execute(sql, [tripId]);
+    return (rows as RowDataPacket[])[0];
+};
+
+// Funcio per obtenir les ciutats d'un viatge
+export const getCitiesByTripId = async (connection: any, tripId: number) => {
+    const sql = `
+        SELECT 
+            C.PK_CityID as id,
+            C.CityName as name,
+            C.Country as country,
+            C.Latitude as lat,
+            C.Longitude as lng,
+            TD.VisitOrder as 'order'
+        FROM Cities C
+        INNER JOIN Trip_Destinations TD ON C.PK_CityID = TD.FK_CityID
+        WHERE TD.FK_TripID = ?
+        ORDER BY TD.VisitOrder ASC
+    `;
+    const [rows] = await connection.execute(sql, [tripId]);
+    return rows as RowDataPacket[];
+};
+
+// Funcio per obtenir els participants d'un viatge
+export const getTripParticipants = async (connection: any, tripId: number) => {
+    const sql = `
+        SELECT U.PK_UserID as id, U.Name as name, U.ProfilePicture as avatar
+        FROM Users U
+        INNER JOIN Trip_Participants TP ON U.PK_UserID = TP.FK_UserID
+        WHERE TP.FK_TripID = ?
+    `;
+    const [rows] = await connection.execute(sql, [tripId]);
+    return rows as RowDataPacket[];
+}
