@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './TripList.css';
 
 const TripList = () => {
     const [trips, setTrips] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const handleDelete = async (e, tripId) => {
         e.stopPropagation();
@@ -21,7 +23,7 @@ const TripList = () => {
                 alert("Error al eliminar el viatge");
             }
         } catch (error) {
-            console.error("Error eliminando:", error);
+            console.error("Error eliminant:", error);
         }
     };
 
@@ -37,7 +39,7 @@ const TripList = () => {
                     setTrips(data);
                 }
             } catch (error) {
-                console.error("Error cargando viajes:", error);
+                console.error("Error carregant viatges:", error);
             } finally {
                 setLoading(false);
             }
@@ -59,10 +61,13 @@ const TripList = () => {
 
     return (
         <div className="trips-grid">
-
             {trips.map((trip) => (
-                <div key={trip.id} className="trip-card">
-
+                <div 
+                    key={trip.id} 
+                    className="trip-card"
+                    onClick={() => navigate(`/trip/${trip.id}`)}
+                    style={{ cursor: 'pointer' }}
+                >
                     <button 
                         className="delete-btn" 
                         onClick={(e) => handleDelete(e, trip.id)}

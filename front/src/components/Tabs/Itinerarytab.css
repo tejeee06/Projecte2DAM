@@ -1,0 +1,330 @@
+.days-tracker {
+    background-color: #f1f8ff;
+    border: 1px solid #cce5ff;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.days-tracker.limit-exceeded {
+    background-color: #fff5f5;
+    border-color: #ffc9c9;
+}
+
+.tracker-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    color: #444;
+}
+
+.tracker-bar-bg {
+    height: 10px;
+    background-color: #e1e4e8;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.tracker-bar-fill {
+    height: 100%;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+}
+
+.itinerary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.city-card-modern {
+    background: #ffffff;
+    border: 1px solid #edf2f7;
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s, transform 0.2s, background-color 0.2s;
+    position: relative;
+    user-select: none;
+}
+
+.city-card-modern:hover {
+    box-shadow: 0 8px 15px rgba(0,0,0,0.06);
+    border-color: #bbdefb;
+    background-color: #fafafa;
+}
+
+.city-card-modern:active {
+    cursor: grabbing !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    transform: scale(1.02);
+    z-index: 10;
+}
+
+.order-circle {
+    background: #1565c0;
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 3px 6px rgba(21, 101, 192, 0.2);
+}
+
+.city-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.city-info h3 {
+    margin: 0;
+    font-family: "Playfair Display", serif;
+    font-size: 1.3rem;
+    color: #2c3e50;
+    line-height: 1.2;
+}
+
+.country-badge {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #90a4ae;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.days-control-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.days-label {
+    font-size: 0.7rem;
+    color: #999;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.days-stepper {
+    display: flex;
+    align-items: center;
+    background: #f1f8e9;
+    border-radius: 30px;
+    padding: 4px;
+    border: 1px solid #c5e1a5;
+    gap: 0; 
+}
+
+.stepper-btn {
+    background: #ffffff;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    color: #1565c0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.stepper-btn:hover:not(:disabled) {
+    background: #1565c0;
+    color: white;
+    transform: scale(1.1);
+}
+
+.stepper-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #e0e0e0;
+}
+
+.days-value {
+    margin: 0 12px;
+    font-weight: 700;
+    color: #33691e;
+    min-width: 50px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.city-index {
+    width: 32px;
+    height: 32px;
+    background: #f0f4f8;
+    color: #1565c0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: "Playfair Display", serif;
+    font-size: 1rem;
+}
+
+.city-info {
+    flex: 1;
+}
+
+.city-info h3 {
+    margin: 0;
+    color: #333;
+    font-family: "Playfair Display", serif;
+    font-size: 1.1rem;
+}
+
+.city-info p {
+    margin: 0;
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.city-actions {
+    min-width: 150px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.display-mode {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.days-badge {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.edit-btn {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.edit-btn:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.edit-mode {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.2s;
+}
+
+.days-input {
+    width: 50px;
+    padding: 6px;
+    border: 2px solid #1565c0;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    outline: none;
+}
+
+.save-btn {
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.save-btn:hover {
+    background: #0d47a1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+    .trip-main-content {
+        padding: 1rem;
+    }
+
+    .trip-header {
+        padding: 0.5rem 1rem;
+    }
+    
+    .trip-title-main {
+        font-size: 2rem;
+    }
+
+    .tabs-navigation {
+        gap: 0.5rem;
+    }
+    .tab-btn {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .city-card-modern {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .order-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    .city-info h3 {
+        font-size: 1.1rem;
+    }
+
+    .days-label {
+        display: none;
+    }
+    
+    .days-stepper {
+        padding: 2px;
+    }
+    
+    .stepper-btn {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .days-value {
+        min-width: 40px;
+        margin: 0 5px;
+        font-size: 0.9rem;
+    }
+}
