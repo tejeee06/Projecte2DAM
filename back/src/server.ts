@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import userRoutes from './routes/userRoutes';
 import tripRoutes from './routes/tripRoutes';
+import friendshipRoutes from './routes/friendshipRoutes';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json()); 
 app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
+app.use('/api/friends', friendshipRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.send('Benvingut a la API de Compasity');
 });

@@ -71,3 +71,16 @@ export const deleteUserById = async (userId: number): Promise<boolean> => {
     throw error;
   }
 };
+
+export const searchUsersByName = async (query: string, currentUserId: number) => {
+    const sql = `
+        SELECT PK_UserID, UserName, Name, Surnames, ProfilePicture 
+        FROM Users 
+        WHERE (UserName LIKE ? OR Name LIKE ?) 
+        AND PK_UserID != ?
+        LIMIT 10
+    `;
+    const searchTerm = `%${query}%`;
+    const [rows] = await pool.execute<RowDataPacket[]>(sql, [searchTerm, searchTerm, currentUserId]);
+    return rows;
+};

@@ -187,3 +187,19 @@ export const deleteUserAccount = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error del servidor al eliminar l\'usuari.' });
     }
 };
+
+export const searchUsers = async (req: Request, res: Response) => {
+    const { query, userId } = req.query;
+
+    if (!query || typeof query !== 'string') {
+         return res.status(400).json({ message: 'Falta el paràmetre de cerca.' });
+    }
+
+    try {
+        const users = await userModel.searchUsersByName(query, Number(userId));
+        res.json(users);
+    } catch (error) {
+        console.error('Error buscant usuaris:', error);
+        res.status(500).json({ message: 'Error del servidor.' });
+    }
+};
