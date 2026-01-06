@@ -1,0 +1,39 @@
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.close-btn {
+    background: none; border: none; font-size: 1.5rem; cursor: pointer;
+}
+.request-item {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 15px;
+}
+.req-info { display: flex; align-items: center; gap: 10px; }
+.req-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.req-name { font-weight: bold; display: block; }
+.req-fullname { font-size: 0.8rem; color: #666; }
+.req-actions { display: flex; gap: 5px; }
+.btn-accept { background: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+.btn-reject { background: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }

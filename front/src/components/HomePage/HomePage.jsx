@@ -4,16 +4,22 @@ import { useNavigate } from "react-router-dom";
 import logo from '../../assets/ProjectLogo.png'; 
 import TripForm from "../TripForm/TripForm";
 import TripList from "../TripList/TripList";
+import FriendRequestsModal from "../FriendRequest/FriendRequestModal";
+import FriendsTab from "../Tabs/Friendstab";
+import { getPendingRequests } from '../../services/friendService';
 
 const API_URL = 'http://localhost:3001'; 
 
 const HomePage = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('create');
+    const [userId, setUserId] = useState(null);
     const [username, setUsername] = useState('Viatger'); 
     const [email, setEmail] = useState('');
     const [profilePicture, setProfilePicture] = useState(null); 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showRequestsModal, setShowRequestsModal] = useState(false);
+    const [pendingCount, setPendingCount] = useState(0);
     const menuRef = useRef(null);
 
     useEffect(() => {
@@ -22,7 +28,14 @@ const HomePage = () => {
         if (storedUserJSON) {
             try {
                 const storedUser = JSON.parse(storedUserJSON);
+                
+                if (storedUser.PK_UserID) {
+                    setUserId(storedUser.PK_UserID);
+                    updateNotifications(storedUser.PK_UserID);
+                }
+
                 if (storedUser.Name) setUsername(storedUser.Name);
+                
                 if (storedUser.Email) setEmail(storedUser.Email);
                 
                 if (storedUser.ProfilePicture) {
@@ -37,7 +50,7 @@ const HomePage = () => {
                     }
                 }
             } catch (error) {
-                console.error("Error al leer datos del usuario", error);
+                console.error("Error al llegir les dades de l'usuari", error);
             }
         }
     }, []);
@@ -54,6 +67,16 @@ const HomePage = () => {
         };
     }, [menuRef]);
 
+    const updateNotifications = async (id) => {
+        if (!id) return;
+        try {
+            const reqs = await getPendingRequests(id);
+            setPendingCount(reqs.length);
+        } catch (error) {
+            console.error("Error actualitzant notificacions", error);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('user');
         navigate('/');
@@ -68,7 +91,10 @@ const HomePage = () => {
         navigate('/profile'); 
     };
 
-    const handleFriendRequests = () => console.log("Veure sol·licituds");
+    const handleFriendRequests = () => {
+        setIsMenuOpen(false);
+        setShowRequestsModal(true);
+    };
 
     const renderContent = () => {
         switch (activeTab) {
@@ -88,9 +114,8 @@ const HomePage = () => {
                 );
             case 'friends':
                 return (
-                    <div className="dynamic-content-placeholder fade-in">
-                        <h3>Amics</h3>
-                        <p>Connecta amb els teus companys de ruta aquí.</p>
+                    <div className="friends-view-container fade-in">
+                        <FriendsTab currentUserId={userId} />
                     </div>
                 );
             default:
@@ -128,6 +153,7 @@ const HomePage = () => {
                         ) : (
                            <DefaultUserIcon />
                         )}
+                        {pendingCount > 0 && <span className="notification-dot"></span>}
                     </div>
 
                     {isMenuOpen && (
@@ -162,7 +188,9 @@ const HomePage = () => {
                                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                                     </svg>
                                     Sol·licituds d'Amistat
-                                    <span className="notification-badge">2</span>
+                                    {pendingCount > 0 && (
+                                        <span className="notification-badge">{pendingCount}</span>
+                                    )}
                                 </li>
 
                                 <div className="menu-separator"></div>
@@ -239,6 +267,14 @@ const HomePage = () => {
                     {renderContent()}
                 </section>
             </main>
+            
+            {showRequestsModal && (
+                <FriendRequestsModal 
+                    userId={userId} 
+                    onClose={() => setShowRequestsModal(false)}
+                    onUpdate={() => updateNotifications(userId)}
+                />
+            )}
         </div>
     );
 };
