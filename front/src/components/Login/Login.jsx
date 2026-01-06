@@ -34,12 +34,16 @@ const Login = () => {
 
             if (response.ok) {
                 setMessage('¡Bienvenido! Redirigiendo...');
-                console.log('Datos del usuario:', data.user);
-                
-                // --- AQUI ESTÁ EL ÚNICO CAMBIO ---
-                // Guardamos el usuario para que la HomePage pueda decir "Hola Nombre"
+                console.log('Datos recibidos del servidor:', data.user);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                // ---------------------------------
+                
+                const realUserId = data.user.PK_UserID || data.user.id || data.user._id;
+
+                if (realUserId) {
+                    localStorage.setItem('userId', realUserId);
+                } else {
+                    console.error("ERROR: No s'ha trobat un ID vàlid en l'usuari rebut", data.user);
+                }
 
                 setTimeout(() => {
                     navigate('/homePage');
@@ -49,8 +53,8 @@ const Login = () => {
             }
 
         } catch (error) {
-            console.error('Error de conexió:', error);
-            setMessage('No sa pogut connectar amb el servidor.');
+            console.error('Error de conexión:', error);
+            setMessage('No s\'ha pogut connectar amb el servidor.');
         } finally {
             setIsLoading(false);
         }
@@ -109,7 +113,7 @@ const Login = () => {
                 </div>
             </main>
         </div>
-    )
+    );
 }
 
 export default Login;

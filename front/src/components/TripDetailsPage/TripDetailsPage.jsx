@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Map3DTab from '../Tabs/Map3Dtab';
 import ItineraryTab from '../Tabs/Itinerarytab';
 import ExpensesTab from '../Tabs/Expensetab';
+import ParticipantsTab from '../Tabs/Participantstab';
 import logo from '../../assets/ProjectLogo.png';
 import './TripDetails.css'; 
 
@@ -13,23 +14,46 @@ const TripDetailsPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('itinerary');
 
-    useEffect(() => {
-        const fetchDetails = async () => {
-            try {
-                const response = await fetch(`http://localhost:3001/api/trips/details/${tripId}`);
-                if (!response.ok) throw new Error('Error al carregar els detalls del viatge');
-                const data = await response.json();
-               
-                if (data.cities) {
-                    data.cities = data.cities.map(c => ({ ...c, days: c.days || 1 }));
-                }
-                setTripData(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
+    const getSafeUserId = () => {
+        const storedId = localStorage.getItem('userId');
+        
+        if (storedId && storedId !== 'undefined' && storedId !== 'null' && !isNaN(storedId)) {
+            return parseInt(storedId, 10);
+        }
+
+        try {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const userObj = JSON.parse(userStr);
+                const id = userObj.PK_UserID || userObj.id || userObj._id;
+                return id ? parseInt(id, 10) : 0;
             }
-        };
+        } catch (e) {
+            console.error("Error recuperant l'usuari", e);
+        }
+        return 0;
+    };
+
+    const currentUserId = getSafeUserId();
+
+    const fetchDetails = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/trips/details/${tripId}`);
+            if (!response.ok) throw new Error('Error al carregar els detalls del viatge');
+            const data = await response.json();
+            
+            if (data.cities) {
+                data.cities = data.cities.map(c => ({ ...c, days: c.days || 1 }));
+            }
+            setTripData(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchDetails();
     }, [tripId]);
 
@@ -48,22 +72,6 @@ const TripDetailsPage = () => {
 
     if (loading) return <div className="loading-container">Carregant...</div>;
     if (!tripData) return <div className="error-container">Error.</div>;
-
-    const ParticipantsTab = ({ participants }) => (
-        <div className="participants-grid">
-            {participants && participants.map(user => (
-                <div key={user.id} className="participant-card">
-                    <div className="avatar-circle">
-                        {user.name.charAt(0)}
-                    </div>
-                    <div>
-                        <h4 style={{ margin: '0.5rem 0 0' }}>{user.name}</h4>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: '#666' }}>Traveler</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
 
     return (
         <div className="trip-details-container">
@@ -107,7 +115,16 @@ const TripDetailsPage = () => {
                     
                     {activeTab === 'map3d' && <Map3DTab cities={tripData.cities} />}
                     {activeTab === 'expenses' && <ExpensesTab />}
-                    {activeTab === 'participants' && <ParticipantsTab participants={tripData.participants} />}
+                    
+                    {activeTab === 'participants' && (
+                        <ParticipantsTab 
+                            tripId={tripData.id}
+                            participants={tripData.participants}
+                            creatorId={tripData.creatorId}
+                            currentUserId={currentUserId}
+                            onUpdate={fetchDetails} 
+                        />
+                    )}
                 </main>
             </div>
         </div>
