@@ -138,4 +138,10 @@ export const getTripParticipants = async (connection: any, tripId: number) => {
     `;
     const [rows] = await connection.execute(sql, [tripId]);
     return rows as RowDataPacket[];
-}
+};
+
+// Funcio per eliminar un participant del viatge
+export const removeParticipant = async (connection: any, tripId: number, userId: number) => {
+    const sql = `DELETE FROM Trip_Participants WHERE FK_TripID = ? AND FK_UserID = ?`;
+    await connection.execute(sql, [tripId, userId]);
+};
