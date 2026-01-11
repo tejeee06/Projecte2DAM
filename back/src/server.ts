@@ -5,6 +5,7 @@ import path from 'path';
 import userRoutes from './routes/userRoutes';
 import tripRoutes from './routes/tripRoutes';
 import friendshipRoutes from './routes/friendshipRoutes';
+import expenseRoutes from './routes/expenseRoutes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api/friends', friendshipRoutes);
+app.use('/api/expenses', expenseRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.send('Benvingut a la API de Compasity');
 });
