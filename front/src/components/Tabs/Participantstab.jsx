@@ -17,8 +17,6 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
                 friendsList = friendsResponse;
             } else if (friendsResponse && Array.isArray(friendsResponse.data)) {
                 friendsList = friendsResponse.data;
-            } else {
-                console.warn("getMyFriends ha fallat:", friendsResponse);
             }
 
             const normalizedFriends = friendsList.map(friend => ({
@@ -36,8 +34,6 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
         } catch (error) {
             console.error(error);
             Swal.fire('Error', 'No s\'han pogut carregar els amics', 'error');
-            setMyFriends([]);
-            setShowAddModal(true);
         }
     };
 
@@ -52,17 +48,13 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
             const data = await response.json();
 
             if (!response.ok) {
-
-                if (response.status === 409) {
-                    throw new Error('Aquest usuari ja està al viatge.');
-                }
+                if (response.status === 409) throw new Error('Aquest usuari ja està al viatge.');
                 throw new Error(data.message || 'Error afegint participant');
             }
             
             Swal.fire({
                 icon: 'success',
                 title: 'Afegit!',
-                text: 'El participant s\'ha unit al viatge.',
                 timer: 1500,
                 showConfirmButton: false
             });
@@ -80,8 +72,8 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
             text: "Vols eliminar aquest participant del viatge?",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#cbd5e1',
             confirmButtonText: 'Sí, elimina\'l',
             cancelButtonText: 'Cancel·lar'
         });
@@ -112,8 +104,8 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
             <div className="participants-header-section">
                 <h3 className="section-title">Viatgers <span>({participants.length})</span></h3>
                 {isCreator && (
-                    <button className="btn-add-participant" onClick={handleOpenAddModal}>
-                        <span className="plus-icon">+</span> Afegir
+                    <button className="btn-add-pill" onClick={handleOpenAddModal}>
+                        + Afegir Viatger
                     </button>
                 )}
             </div>
@@ -124,32 +116,34 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
                     const canRemove = isCreator && !isUserCreator;
 
                     return (
-                        <div key={user.id} className="participant-card">
-                            <div className="avatar-wrapper">
-                                <div className="avatar-circle">
-                                    {user.avatar ? (
-                                        <img src={user.avatar} alt={user.name} />
-                                    ) : (
-                                        (user.name && user.name.length > 0) ? user.name.charAt(0).toUpperCase() : '?'
-                                    )}
-                                </div>
-                                {isUserCreator && <span className="crown-badge" title="Creador">👑</span>}
+                        <div key={user.id} className="participant-card-modern">
+                            <div className="card-header-bg">
+                                {canRemove && (
+                                    <button 
+                                        className="btn-remove-absolute"
+                                        onClick={() => handleRemoveParticipant(user.id)}
+                                        title="Eliminar del viatge"
+                                    >
+                                        ✕
+                                    </button>
+                                )}
+                            </div>
+
+                            <div className="card-avatar-container">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt={user.name} className="card-avatar-img" />
+                                ) : (
+                                    <div className="card-avatar-placeholder">
+                                        {user.name ? user.name.charAt(0).toUpperCase() : '?'}
+                                    </div>
+                                )}
+                                {isUserCreator && <span className="crown-badge" title="Organitzador">👑</span>}
                             </div>
                             
-                            <div className="participant-info">
-                                <h4>{user.name}</h4>
-                                <p className="role-text">{isUserCreator ? 'Organitzador' : 'Viatger'}</p>
+                            <div className="card-info">
+                                <h4 className="card-name">{user.name}</h4>
+                                <p className="card-role">{isUserCreator ? 'Organitzador' : 'Viatger'}</p>
                             </div>
-                            
-                            {canRemove && (
-                                <button 
-                                    className="btn-remove-participant"
-                                    onClick={() => handleRemoveParticipant(user.id)}
-                                    title="Eliminar del viatge"
-                                >
-                                    ✕
-                                </button>
-                            )}
                         </div>
                     );
                 })}
@@ -157,7 +151,7 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
 
             {showAddModal && (
                 <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-                    <div className="modal-box" onClick={e => e.stopPropagation()}>
+                    <div className="modal-box-modern" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
                             <h3>Afegir Amics</h3>
                             <button className="btn-close-modal" onClick={() => setShowAddModal(false)}>✕</button>
@@ -171,18 +165,18 @@ const ParticipantsTab = ({ tripId, participants = [], creatorId, currentUserId, 
                                 </div>
                             ) : (
                                 myFriends.map(friend => (
-                                    <div key={friend.id} className="friend-row">
+                                    <div key={friend.id} className="friend-row-modern">
                                         <div className="friend-row-info">
                                             <div className="mini-avatar">
                                                 {friend.avatar ? (
-                                                    <img src={friend.avatar} alt="av" style={{width:'100%', height:'100%', borderRadius:'50%', objectFit:'cover'}} />
+                                                    <img src={friend.avatar} alt="av" />
                                                 ) : (
                                                     friend.name ? friend.name.charAt(0).toUpperCase() : '?'
                                                 )}
                                             </div>
-                                            <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
-                                                <span>{friend.name}</span>
-                                                {friend.username && <small style={{color:'#888', fontSize:'0.75rem'}}>@{friend.username}</small>}
+                                            <div className="friend-text">
+                                                <span className="friend-name">{friend.name}</span>
+                                                {friend.username && <span className="friend-username">@{friend.username}</span>}
                                             </div>
                                         </div>
                                         <button 

@@ -21,6 +21,8 @@
     font-weight: 500;
     color: #1565c0;
     font-size: 0.95rem;
+    font-family: "Playfair Display", serif;
+    letter-spacing: 0.5px;
 }
 
 .form-input, .form-textarea {
@@ -33,6 +35,9 @@
     transition: all 0.3s ease;
     background-color: #f8fdff;
     box-sizing: border-box;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    color: #445566;
+    font-weight: 400;
 }
 
 .form-input:focus, .form-textarea:focus {
@@ -40,6 +45,13 @@
     border-color: #1565c0;
     box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
     background-color: #fff;
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300; 
+    font-style: italic;
+    color: #90a4ae;
 }
 
 .form-textarea {
@@ -117,17 +129,20 @@
 
 .submit-trip-btn {
     width: 100%;
-    padding: 1rem;
+    padding: 1.2rem;
     background: linear-gradient(90deg, #1565c0, #42a5f5);
     color: white;
     border: none;
     border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: bold;
     cursor: pointer;
     margin-top: 1rem;
     box-shadow: 0 4px 15px rgba(21, 101, 192, 0.3);
     transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Playfair Display', serif; 
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .submit-trip-btn:hover {

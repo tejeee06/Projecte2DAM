@@ -101,7 +101,7 @@ const HomePage = () => {
             case 'create':
                 return (
                     <div className="dynamic-content-placeholder fade-in">
-                        <h3>Crear Nou Viatge</h3>
+                        <h3 className="trips-view-title">Crear Nou Viatge</h3>
                         <TripForm />
                     </div>
                 );

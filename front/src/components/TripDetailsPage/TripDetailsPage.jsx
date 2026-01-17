@@ -70,8 +70,8 @@ const TripDetailsPage = () => {
         return date.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
     };
 
-    if (loading) return <div className="loading-container">Carregant...</div>;
-    if (!tripData) return <div className="error-container">Error.</div>;
+    if (loading) return <div className="loading-container fade-in">Carregant...</div>;
+    if (!tripData) return <div className="error-container fade-in">Error al carregar les dades.</div>;
 
     return (
         <div className="trip-details-container">
@@ -104,7 +104,7 @@ const TripDetailsPage = () => {
                     ))}
                 </nav>
 
-                <main className="tab-content-area">
+                <main className="tab-content-area fade-in">
                     {activeTab === 'itinerary' && (
                         <ItineraryTab 
                             cities={tripData.cities} 

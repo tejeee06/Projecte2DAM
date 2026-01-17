@@ -1,3 +1,4 @@
+/* --- LAYOUT PRINCIPAL --- */
 .friends-tab-wrapper {
     width: 100%;
     max-width: 1200px;
@@ -6,6 +7,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* --- MAIN LAYOUT --- */
 .friends-nav {
     display: flex;
     justify-content: center;
@@ -19,12 +21,14 @@
     border: 2px solid transparent;
     padding: 10px 24px;
     border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
     color: #64748b;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-size: 1.05rem;
 }
 
 .nav-pill:hover {
@@ -55,10 +59,19 @@
     font-size: 1rem;
     outline: none;
     transition: border-color 0.3s;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    color: #445566;
+    font-weight: 400;
 }
 
 .search-input:focus {
     border-color: #3b82f6;
+}
+
+.search-input::placeholder {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    color: #94a3b8;
 }
 
 .search-btn {
@@ -136,6 +149,7 @@
     background: #3b82f6;
     color: white;
     font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -150,8 +164,9 @@
 
 .card-name {
     margin: 5px 0 2px 0;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     color: #1e293b;
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
 }
 
@@ -159,6 +174,8 @@
     margin: 0;
     font-size: 0.9rem;
     color: #64748b;
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    font-weight: 400;
 }
 
 .card-actions {
@@ -171,10 +188,14 @@
     width: 100%;
     padding: 8px 0;
     border-radius: 10px;
-    font-weight: 600;
     cursor: pointer;
     border: none;
     transition: background 0.2s;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .btn-add { background: #10b981; color: white; }
@@ -186,13 +207,14 @@
 .empty-state { grid-column: 1 / -1; text-align: center; color: #94a3b8; margin-top: 40px; }
 .loading-spinner { text-align: center; margin-top: 20px; color: #64748b; font-weight: 600; }
 
+/* --- ANIMACIONS --- */
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
 
-
+/* --- RESPONSIVE --- */
 @media (max-width: 1100px) {
     .cards-grid {
         grid-template-columns: repeat(3, 1fr);
