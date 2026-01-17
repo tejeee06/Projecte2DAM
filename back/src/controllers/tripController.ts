@@ -37,6 +37,13 @@ export const createTrip = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'Falten dades obligatòries.' });
     }
 
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (start > end) {
+        return res.status(400).json({ message: "La data de fi no pot ser anterior a la data d'inici." });
+    }
+
     const connection = await pool.getConnection();
 
     try {

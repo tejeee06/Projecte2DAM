@@ -14,6 +14,7 @@ const TripForm = () => {
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -22,12 +23,13 @@ const TripForm = () => {
     };
 
     const handleAddCity = (e) => {
-        e.preventDefault(); // Para que no recargue la página
+        e.preventDefault(); 
         if (cityInput.trim() !== '' && !cities.includes(cityInput.trim())) {
             setCities([...cities, cityInput.trim()]);
-            setCityInput(''); // Limpiar input
+            setCityInput('');
         }
     };
+
     const handleRemoveCity = (cityToRemove) => {
         setCities(cities.filter(city => city !== cityToRemove));
     };
@@ -46,6 +48,15 @@ const TripForm = () => {
 
         if (cities.length === 0) {
             setMessage({ text: 'Afegeix al menys una ciutat al teu viatge.', type: 'error' });
+            setLoading(false);
+            return;
+        }
+
+        const start = new Date(formData.startDate);
+        const end = new Date(formData.endDate);
+
+        if (start > end) {
+            setMessage({ text: "La data de fi no pot ser anterior a la data d'inici.", type: 'error' });
             setLoading(false);
             return;
         }
