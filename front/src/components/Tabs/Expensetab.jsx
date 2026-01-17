@@ -11,12 +11,11 @@ const ExpensesTab = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [description, setDescription] = useState('');
-    const [amount, setAmount] = useState('');
+    const [amount, setAmount] = useState(''); 
     const [payerId, setPayerId] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [category, setCategory] = useState('General');
+    const [category, setCategory] = useState('General'); 
     const [showAddModal, setShowAddModal] = useState(false);
-
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     const currentUserId = currentUser.PK_UserID;
 
@@ -117,7 +116,7 @@ const ExpensesTab = () => {
             payerId: parseInt(payerId),
             amount: parseFloat(amount),
             description,
-            category,
+            category, 
             involvedUserIds: participants.map(p => p.id) 
         };
 
@@ -137,8 +136,8 @@ const ExpensesTab = () => {
                     showConfirmButton: false
                 });
                 setDescription('');
-                setAmount('');
-                setCategory('General');
+                setAmount(''); 
+                setCategory('General'); 
                 setShowAddModal(false);
                 fetchData(); 
             } else {
@@ -279,6 +278,7 @@ const ExpensesTab = () => {
                                     value={description} 
                                     onChange={e => setDescription(e.target.value)}
                                     required
+                                    placeholder="Ex: Sopar benvinguda"
                                 />
                             </div>
 
@@ -292,20 +292,17 @@ const ExpensesTab = () => {
                                         value={amount} 
                                         onChange={e => setAmount(e.target.value)}
                                         required
+                                        placeholder="0" 
                                     />
                                 </div>
                                 <div className="form-group-modal">
                                     <label>Categoria</label>
-                                    <select 
+                                    <input 
+                                        type="text"
                                         value={category} 
                                         onChange={e => setCategory(e.target.value)}
-                                    >
-                                        <option value="General">General</option>
-                                        <option value="Menjar">Menjar</option>
-                                        <option value="Transport">Transport</option>
-                                        <option value="Allotjament">Allotjament</option>
-                                        <option value="Activitats">Activitats</option>
-                                    </select>
+                                        required
+                                    />
                                 </div>
                             </div>
 
