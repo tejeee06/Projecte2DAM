@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import './TripList.css';
 
 const TripList = () => {
@@ -10,7 +11,23 @@ const TripList = () => {
     const handleDelete = async (e, tripId) => {
         e.stopPropagation();
 
-        if (!window.confirm("Segur que vols eliminar aquest viatge?")) return;
+        const result = await Swal.fire({
+            title: '¿Estàs segur?',
+            text: "No podràs recuperar aquest viatge si l'elimines.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#1565c0', 
+            confirmButtonText: 'Sí, elimina-ho!',
+            cancelButtonText: 'Cancel·la',
+            background: '#fff',
+            borderRadius: '16px',
+            customClass: {
+                popup: 'animated fadeInDown faster' 
+            }
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const response = await fetch(`http://localhost:3001/api/trips/delete/${tripId}`, {
@@ -19,14 +36,29 @@ const TripList = () => {
 
             if (response.ok) {
                 setTrips(trips.filter(trip => trip.id !== tripId));
+                
+                Swal.fire(
+                    'Eliminat!',
+                    'El viatge ha estat eliminat correctament.',
+                    'success'
+                );
             } else {
-                alert("Error al eliminar el viatge");
+                Swal.fire(
+                    'Error',
+                    'No s\'ha pogut eliminar el viatge.',
+                    'error'
+                );
             }
         } catch (error) {
             console.error("Error eliminant:", error);
+            Swal.fire(
+                'Error',
+                'Hi ha hagut un problema de connexió.',
+                'error'
+            );
         }
     };
-
+    
     useEffect(() => {
         const fetchTrips = async () => {
             const storedUser = JSON.parse(localStorage.getItem('user'));
