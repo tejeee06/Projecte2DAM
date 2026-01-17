@@ -108,7 +108,9 @@ const TripDetailsPage = () => {
                     {activeTab === 'itinerary' && (
                         <ItineraryTab 
                             cities={tripData.cities} 
-                            totalTripDays={tripData.totalDays || 7}
+                            startDate={tripData.startDate}
+                            endDate={tripData.endDate}
+                            tripId={tripData.id}
                             onCitiesUpdate={handleCitiesUpdate}
                         />
                     )}

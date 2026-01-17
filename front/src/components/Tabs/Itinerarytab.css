@@ -74,7 +74,8 @@
     transition: all 0.2s ease;
     position: relative;
     user-select: none;
-    cursor: grab; 
+    cursor: grab;
+    touch-action: none; 
 }
 
 .city-card-modern:hover {
