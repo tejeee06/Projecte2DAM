@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./back
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_HOST=host.docker.internal
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=db_Compasity
+      - DB_PORT=3306
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  frontend:
+    build: ./front
+    ports:
+      - "5173:5173" 
+    depends_on:
+      - backend
+    volumes:
+      - ./front/src:/app/src
