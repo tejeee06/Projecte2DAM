@@ -1,0 +1,105 @@
+CREATE DATABASE db_Compasity;
+
+USE db_Compasity;
+
+CREATE TABLE Users (
+    PK_UserID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Surnames VARCHAR(150) NOT NULL,
+    UserName VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE, 
+    Description TEXT NULL,
+    ProfilePicture VARCHAR(500) NULL  
+);
+
+CREATE TABLE Cities (
+    PK_CityID INT PRIMARY KEY AUTO_INCREMENT,
+    CityName VARCHAR(100) NOT NULL,
+    Country VARCHAR(100) NOT NULL,
+    Latitude DECIMAL(10, 8) NOT NULL,
+    Longitude DECIMAL(11, 8) NOT NULL
+);
+
+CREATE TABLE Trips (
+    PK_TripID INT PRIMARY KEY AUTO_INCREMENT,
+    TripName VARCHAR(150) NOT NULL,
+    TripDescription TEXT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL,
+    FK_CreatorID INT NOT NULL,
+    FOREIGN KEY (FK_CreatorID) REFERENCES Users(PK_UserID)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Trip_Participants (
+    FK_TripID INT NOT NULL,
+    FK_UserID INT NOT NULL,
+    AddedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (FK_TripID, FK_UserID),
+    FOREIGN KEY (FK_TripID) REFERENCES Trips(PK_TripID)
+        ON DELETE CASCADE,
+    FOREIGN KEY (FK_UserID) REFERENCES Users(PK_UserID)
+        ON DELETE CASCADE 
+);
+
+CREATE TABLE Trip_Destinations (
+    PK_DestinationID INT PRIMARY KEY AUTO_INCREMENT,
+    FK_TripID INT NOT NULL,
+    FK_CityID INT NOT NULL,
+    VisitOrder INT NOT NULL,
+    FOREIGN KEY (FK_TripID) REFERENCES Trips(PK_TripID) 
+        ON DELETE CASCADE,
+    FOREIGN KEY (FK_CityID) REFERENCES Cities(PK_CityID) 
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE Trip_Expenses (
+    PK_ExpenseID INT PRIMARY KEY AUTO_INCREMENT,
+    FK_TripID INT NOT NULL,
+    FK_PayerID INT NOT NULL,
+    Amount DECIMAL(10, 2) NOT NULL,
+    Description VARCHAR(255) NOT NULL,
+    Category VARCHAR(50) DEFAULT 'General',
+    ExpenseDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (FK_TripID) REFERENCES Trips(PK_TripID) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (FK_PayerID) REFERENCES Users(PK_UserID) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Trip_Expense_Shares (
+    PK_ShareID INT PRIMARY KEY AUTO_INCREMENT,
+    FK_ExpenseID INT NOT NULL,
+    FK_DebtorID INT NOT NULL,
+    ShareAmount DECIMAL(10, 2) NOT NULL,
+    
+    FOREIGN KEY (FK_ExpenseID) REFERENCES Trip_Expenses(PK_ExpenseID) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (FK_DebtorID) REFERENCES Users(PK_UserID) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Taula Especial Relacio Recursiva --
+CREATE TABLE Friendships (
+    PK_FriendshipID INT PRIMARY KEY AUTO_INCREMENT,
+    FK_UserID_Sender INT NOT NULL,
+    FK_UserID_Receiver INT NOT NULL,
+    Status ENUM('Pending', 'Accepted', 'Rejected', 'Blocked') DEFAULT 'Pending',
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (FK_UserID_Sender) REFERENCES Users(PK_UserID) 
+        ON DELETE CASCADE,
+    FOREIGN KEY (FK_UserID_Receiver) REFERENCES Users(PK_UserID) 
+        ON DELETE CASCADE,
+    UNIQUE KEY unique_friendship (FK_UserID_Sender, FK_UserID_Receiver),
+    CHECK (FK_UserID_Sender <> FK_UserID_Receiver)
+);
+
+/* Proves de inserccio */
+USE db_Compasity;
+SELECT * FROM Trips;
+SELECT * FROM Cities;
+SELECT * FROM Users;
+SELECT * FROM Trip_Expenses;
